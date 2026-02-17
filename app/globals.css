@@ -4,43 +4,45 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  font-size: 17px;
   --background: #FFF8F0;
-  --foreground: #2D2A26;
+  --foreground: #1A1A1A;
   --card: #FFFFFF;
-  --card-foreground: #2D2A26;
+  --card-foreground: #1A1A1A;
   --popover: #FFFFFF;
-  --popover-foreground: #2D2A26;
-  --primary: #E8956B;
+  --popover-foreground: #1A1A1A;
+  --primary: #F97316;
   --primary-foreground: #FFFFFF;
   --secondary: #F5F0EB;
-  --secondary-foreground: #2D2A26;
+  --secondary-foreground: #1A1A1A;
   --muted: #F5F0EB;
-  --muted-foreground: #8A8580;
-  --accent: #FFCBA4;
-  --accent-foreground: #2D2A26;
-  --destructive: #D4644E;
+  --muted-foreground: #000000; /* Pure black instead of charcoal */
+  --accent: #FFEDD5;
+  --accent-foreground: #1A1A1A;
+  --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #E8E4E0;
-  --input: #E8E4E0;
-  --ring: #E8956B;
-  --chart-1: #E8956B;
-  --chart-2: #FFCBA4;
-  --chart-3: #8A8580;
-  --chart-4: #C4A882;
-  --chart-5: #D4B896;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #F97316;
+  --chart-1: #F97316;
+  --chart-2: #10B981;
+  --chart-3: #3B82F6;
+  --chart-4: #8B5CF6;
+  --chart-5: #EC4899;
   --radius: 0.75rem;
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #2D2A26;
-  --sidebar-primary: #E8956B;
+  --sidebar-foreground: #000000; /* Selected item: Pure Black */
+  --sidebar-muted: #4A4540;      /* Unselected item: Soft Charcoal */
+  --sidebar-primary: #F97316;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #FFF3E8;
-  --sidebar-accent-foreground: #2D2A26;
-  --sidebar-border: #F0ECE8;
-  --sidebar-ring: #E8956B;
-  --success: #5B9A6B;
+  --sidebar-accent: #FFEDD5; /* Slightly darker than #FFF7ED */
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #F3F4F6;
+  --sidebar-ring: #F97316;
+  --success: #10B981;
   --success-foreground: #FFFFFF;
-  --warning: #D4A44E;
-  --warning-foreground: #2D2A26;
+  --warning: #F59E0B;
+  --warning-foreground: #1A1A1A;
 }
 
 @theme inline {
@@ -76,6 +78,7 @@
   --radius-xl: calc(var(--radius) + 4px);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-accent: var(--sidebar-accent);

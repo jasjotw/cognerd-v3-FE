@@ -17,9 +17,11 @@ export function OverviewPage() {
   return (
     <div className="flex flex-col gap-6">
       {/* Top metrics row */}
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {/* Large visibility score */}
-        <VisibilityScore score={68} change={12} label="Overall Visibility" />
+        <div className="sm:col-span-2 lg:col-span-1">
+          <VisibilityScore score={68} change={12} label="Overall Visibility" />
+        </div>
 
         {/* Metric cards */}
         <MetricCard
@@ -57,33 +59,33 @@ export function OverviewPage() {
       </div>
 
       {/* Trend chart + Platform breakdown */}
-      <div className="grid grid-cols-5 gap-6">
-        <div className="col-span-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        <div className="lg:col-span-3">
           <VisibilityTrendChart />
         </div>
-        <div className="col-span-2">
+        <div className="lg:col-span-2">
           <PlatformBreakdown />
         </div>
       </div>
 
       {/* Competitors + Alerts */}
-      <div className="grid grid-cols-5 gap-6">
-        <div className="col-span-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        <div className="lg:col-span-3">
           <CompetitorTable />
         </div>
-        <div className="col-span-2">
+        <div className="lg:col-span-2">
           <AlertsFeed />
         </div>
       </div>
 
       {/* Sentiment + Content Insights */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <SentimentWidget />
         <ContentInsights />
       </div>
 
       {/* Sources + Prompts + AI Health */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <SourceAttribution />
         <PromptAnalyticsWidget />
         <AIHealthScore />

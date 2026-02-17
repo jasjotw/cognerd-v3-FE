@@ -13,9 +13,9 @@ export function VisibilityScore({ score, change, label }: VisibilityScoreProps) 
   const offset = circumference - (score / 100) * circumference;
 
   const getScoreColor = (s: number) => {
-    if (s >= 70) return "#5B9A6B";
-    if (s >= 50) return "#E8956B";
-    return "#D4644E";
+    if (s >= 70) return "#10B981"; // success
+    if (s >= 50) return "#F59E0B"; // warning
+    return "#EF4444"; // destructive
   };
 
   return (
@@ -58,7 +58,7 @@ export function VisibilityScore({ score, change, label }: VisibilityScoreProps) 
         </svg>
         <div className="absolute flex flex-col items-center">
           <span className="text-3xl font-bold tracking-tight text-foreground">{score}</span>
-          <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+          <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
             / 100
           </span>
         </div>
@@ -75,7 +75,7 @@ export function VisibilityScore({ score, change, label }: VisibilityScoreProps) 
           >
             {change >= 0 ? "+" : ""}{change}%
           </span>
-          <span className="text-[11px] text-muted-foreground">vs last week</span>
+          <span className="text-[12px] text-muted-foreground">vs last week</span>
         </div>
       </div>
     </div>

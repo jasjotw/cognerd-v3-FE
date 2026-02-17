@@ -29,7 +29,7 @@ export function SentimentWidget() {
         </div>
         <div className="flex items-center gap-1.5 rounded-full bg-success/8 px-2.5 py-1">
           <span className="h-1.5 w-1.5 rounded-full bg-success" />
-          <span className="text-[11px] font-medium text-success">{avgPositive}% positive</span>
+          <span className="text-[12px] font-medium text-success">{avgPositive}% positive</span>
         </div>
       </div>
 
@@ -37,15 +37,15 @@ export function SentimentWidget() {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-success" />
-          <span className="text-[11px] text-muted-foreground">Positive</span>
+          <span className="text-[12px] text-muted-foreground">Positive</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-warning" />
-          <span className="text-[11px] text-muted-foreground">Neutral</span>
+          <span className="text-[12px] text-muted-foreground">Neutral</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="h-2 w-2 rounded-full bg-destructive" />
-          <span className="text-[11px] text-muted-foreground">Negative</span>
+          <span className="text-[12px] text-muted-foreground">Negative</span>
         </div>
       </div>
 
@@ -55,7 +55,7 @@ export function SentimentWidget() {
           <div key={item.platform} className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-foreground">{item.platform}</span>
-              <span className="text-[11px] text-muted-foreground">
+              <span className="text-[12px] text-muted-foreground">
                 {item.positive}% / {item.neutral}% / {item.negative}%
               </span>
             </div>

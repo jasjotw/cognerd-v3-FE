@@ -16,12 +16,19 @@ import {
   CartesianGrid,
 } from "recharts";
 
+const competitorPalette = [
+  "#92B6B1", "#E5C39E", "#B199AF", "#9F9ADE", "#D4A373", 
+  "#A3C4BC", "#D8A7B1", "#B6AD90", "#A9BCD0", "#D9AE94", 
+  "#BFCC94", "#97A7B3", "#CAB8FF", "#FFD8BE", "#D1E5F0", 
+  "#F2C6DE", "#C7D3D1", "#D0B8A8", "#B5C9C3", "#E0C3FC"
+];
+
 const competitors = [
-  { name: "Your Brand", visibility: 68, mentions: 466, citations: 302, sentiment: 72, avgPos: 2.1, change: 12, color: "#E8956B" },
-  { name: "Ahrefs", visibility: 82, mentions: 621, citations: 448, sentiment: 78, avgPos: 1.4, change: 5, color: "#FFCBA4" },
-  { name: "SEMrush", visibility: 74, mentions: 512, citations: 398, sentiment: 68, avgPos: 1.8, change: -2, color: "#C4A882" },
-  { name: "Moz", visibility: 54, mentions: 312, citations: 198, sentiment: 65, avgPos: 3.2, change: -8, color: "#8A8580" },
-  { name: "Brightedge", visibility: 41, mentions: 201, citations: 124, sentiment: 58, avgPos: 4.1, change: 2, color: "#D4B896" },
+  { name: "Your Brand", visibility: 68, mentions: 466, citations: 302, sentiment: 72, avgPos: 2.1, change: 12, color: competitorPalette[0] },
+  { name: "Ahrefs", visibility: 82, mentions: 621, citations: 448, sentiment: 78, avgPos: 1.4, change: 5, color: competitorPalette[1] },
+  { name: "SEMrush", visibility: 74, mentions: 512, citations: 398, sentiment: 68, avgPos: 1.8, change: -2, color: competitorPalette[2] },
+  { name: "Moz", visibility: 54, mentions: 312, citations: 198, sentiment: 65, avgPos: 3.2, change: -8, color: competitorPalette[3] },
+  { name: "Brightedge", visibility: 41, mentions: 201, citations: 124, sentiment: 58, avgPos: 4.1, change: 2, color: competitorPalette[4] },
 ];
 
 const radarData = [
@@ -93,15 +100,10 @@ export function CompetitorsPage() {
             <p className="text-xs text-muted-foreground">Multi-dimensional comparison</p>
           </div>
           <div className="flex flex-wrap items-center gap-3 mb-2">
-            {[
-              { key: "Your Brand", color: "#E8956B" },
-              { key: "Ahrefs", color: "#FFCBA4" },
-              { key: "SEMrush", color: "#C4A882" },
-              { key: "Moz", color: "#8A8580" },
-            ].map((l) => (
-              <div key={l.key} className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: l.color }} />
-                <span className="text-[10px] text-muted-foreground">{l.key}</span>
+            {competitors.slice(0, 4).map((c, i) => (
+              <div key={c.name} className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: c.color }} />
+                <span className="text-[10px] text-muted-foreground">{c.name}</span>
               </div>
             ))}
           </div>
@@ -109,11 +111,11 @@ export function CompetitorsPage() {
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData}>
                 <PolarGrid stroke="#E8E4E0" />
-                <PolarAngleAxis dataKey="metric" tick={{ fontSize: 10, fill: "#8A8580" }} />
-                <Radar name="Your Brand" dataKey="Your Brand" stroke="#E8956B" fill="#E8956B" fillOpacity={0.15} strokeWidth={2} />
-                <Radar name="Ahrefs" dataKey="Ahrefs" stroke="#FFCBA4" fill="#FFCBA4" fillOpacity={0.08} strokeWidth={1.5} />
-                <Radar name="SEMrush" dataKey="SEMrush" stroke="#C4A882" fill="none" strokeWidth={1.5} strokeDasharray="4 4" />
-                <Radar name="Moz" dataKey="Moz" stroke="#8A8580" fill="none" strokeWidth={1} strokeDasharray="2 2" />
+                <PolarAngleAxis dataKey="metric" tick={{ fontSize: 10, fill: "#000000" }} />
+                <Radar name={competitors[0].name} dataKey={competitors[0].name} stroke={competitors[0].color} fill={competitors[0].color} fillOpacity={0.15} strokeWidth={2} />
+                <Radar name={competitors[1].name} dataKey={competitors[1].name} stroke={competitors[1].color} fill={competitors[1].color} fillOpacity={0.08} strokeWidth={1.5} />
+                <Radar name={competitors[2].name} dataKey={competitors[2].name} stroke={competitors[2].color} fill="none" strokeWidth={1.5} strokeDasharray="4 4" />
+                <Radar name={competitors[3].name} dataKey={competitors[3].name} stroke={competitors[3].color} fill="none" strokeWidth={1} strokeDasharray="2 2" />
                 <Tooltip content={<CustomTooltip />} />
               </RadarChart>
             </ResponsiveContainer>
@@ -188,19 +190,19 @@ export function CompetitorsPage() {
             <p className="text-xs text-muted-foreground">Where competitors appear and you don't</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-primary" /><span className="text-[11px] text-muted-foreground">You</span></div>
-            <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#C4A882" }} /><span className="text-[11px] text-muted-foreground">Top Competitor</span></div>
+            <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#ECA17A" }} /><span className="text-[11px] text-muted-foreground">You</span></div>
+            <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#FFD5B5" }} /><span className="text-[11px] text-muted-foreground">Top Competitor</span></div>
           </div>
         </div>
         <div className="h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={gapAnalysis} margin={{ top: 4, right: 4, bottom: 0, left: -10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E8E4E0" strokeOpacity={0.5} vertical={false} />
-              <XAxis dataKey="topic" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#8A8580" }} angle={-20} textAnchor="end" height={50} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#8A8580" }} />
+              <XAxis dataKey="topic" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#000000" }} angle={-20} textAnchor="end" height={50} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#000000" }} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="yours" name="Your Brand" fill="#E8956B" radius={[4, 4, 0, 0]} barSize={16} />
-              <Bar dataKey="topCompetitor" name="Top Competitor" fill="#C4A882" radius={[4, 4, 0, 0]} barSize={16} />
+              <Bar dataKey="yours" name="Your Brand" fill="#ECA17A" radius={[4, 4, 0, 0]} barSize={16} />
+              <Bar dataKey="topCompetitor" name="Top Competitor" fill="#FFD5B5" radius={[4, 4, 0, 0]} barSize={16} />
             </BarChart>
           </ResponsiveContainer>
         </div>

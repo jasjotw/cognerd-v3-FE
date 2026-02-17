@@ -16,11 +16,11 @@ const topSources = [
 ];
 
 const referralData = [
-  { source: "ChatGPT", visits: 3420, color: "#E8956B" },
-  { source: "Perplexity", visits: 2180, color: "#FFCBA4" },
-  { source: "Gemini", visits: 1540, color: "#C4A882" },
-  { source: "AI Overviews", visits: 980, color: "#8A8580" },
-  { source: "Claude", visits: 620, color: "#D4B896" },
+  { source: "ChatGPT", visits: 3420, color: "#10A37F" },
+  { source: "Perplexity", visits: 2180, color: "#20C2D5" },
+  { source: "Gemini", visits: 1540, color: "#1A73E8" },
+  { source: "AI Overviews", visits: 980, color: "#F9AB00" },
+  { source: "Claude", visits: 620, color: "#D97757" },
 ];
 
 const trafficByDay = [
@@ -122,13 +122,13 @@ export function SourcesPage() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={trafficByDay} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E8E4E0" strokeOpacity={0.5} vertical={false} />
-                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#8A8580" }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#8A8580" }} />
+                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#000000" }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#000000" }} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="chatgpt" name="ChatGPT" stackId="a" fill="#E8956B" barSize={24} />
-                <Bar dataKey="perplexity" name="Perplexity" stackId="a" fill="#FFCBA4" />
-                <Bar dataKey="gemini" name="Gemini" stackId="a" fill="#C4A882" />
-                <Bar dataKey="other" name="Other" stackId="a" fill="#8A8580" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="chatgpt" name="ChatGPT" stackId="a" fill="#10A37F" barSize={24} />
+                <Bar dataKey="perplexity" name="Perplexity" stackId="a" fill="#20C2D5" />
+                <Bar dataKey="gemini" name="Gemini" stackId="a" fill="#1A73E8" />
+                <Bar dataKey="other" name="Other" stackId="a" fill="#6B7280" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -86,19 +86,19 @@ export function PromptsPage() {
               <p className="text-xs text-muted-foreground">Total prompts vs visible prompts this week</p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-primary" /><span className="text-[11px] text-muted-foreground">Total</span></div>
-              <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#FFCBA4" }} /><span className="text-[11px] text-muted-foreground">Visible</span></div>
+              <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#ECA17A" }} /><span className="text-[11px] text-muted-foreground">Total</span></div>
+              <div className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#FFD5B5" }} /><span className="text-[11px] text-muted-foreground">Visible</span></div>
             </div>
           </div>
           <div className="h-[240px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={volumeData} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E8E4E0" strokeOpacity={0.5} vertical={false} />
-                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#8A8580" }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#8A8580" }} />
+                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#000000" }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#000000" }} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="volume" name="Total Volume" fill="#E8956B" radius={[4, 4, 0, 0]} barSize={20} />
-                <Bar dataKey="visible" name="Visible" fill="#FFCBA4" radius={[4, 4, 0, 0]} barSize={20} />
+                <Bar dataKey="volume" name="Total Volume" fill="#ECA17A" radius={[4, 4, 0, 0]} barSize={20} />
+                <Bar dataKey="visible" name="Visible" fill="#FFD5B5" radius={[4, 4, 0, 0]} barSize={20} />
               </BarChart>
             </ResponsiveContainer>
           </div>

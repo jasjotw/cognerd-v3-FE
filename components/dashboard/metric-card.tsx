@@ -79,7 +79,7 @@ export function MetricCard({
         <span className="text-xs text-muted-foreground">{label}</span>
       </div>
       {changeLabel && (
-        <p className="text-[11px] text-muted-foreground">{changeLabel}</p>
+        <p className="text-[12px] text-muted-foreground">{changeLabel}</p>
       )}
     </div>
   );

@@ -112,7 +112,7 @@ export function VisibilityPage() {
       </div>
 
       {/* Visibility trend - full width */}
-      <div className="card-hover rounded-xl border border-border bg-card p-5">
+      <div className="rounded-xl border border-border bg-card p-5">
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h3 className="text-sm font-semibold text-card-foreground">Daily Visibility Trend</h3>
@@ -120,9 +120,9 @@ export function VisibilityPage() {
           </div>
           <div className="flex items-center gap-4">
             {[
-              { key: "score", label: "Score", color: "#E8956B" },
-              { key: "mentions", label: "Mentions", color: "#FFCBA4" },
-              { key: "citations", label: "Citations", color: "#8A8580" },
+              { key: "score", label: "Score", color: "#9F9ADE" },
+              { key: "mentions", label: "Mentions", color: "#B199AF" },
+              { key: "citations", label: "Citations", color: "#D4A373" },
             ].map((l) => (
               <div key={l.key} className="flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full" style={{ backgroundColor: l.color }} />
@@ -134,23 +134,13 @@ export function VisibilityPage() {
         <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={dailyData} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
-              <defs>
-                <linearGradient id="scoreG" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#E8956B" stopOpacity={0.15} />
-                  <stop offset="100%" stopColor="#E8956B" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="mentionsG" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#FFCBA4" stopOpacity={0.15} />
-                  <stop offset="100%" stopColor="#FFCBA4" stopOpacity={0} />
-                </linearGradient>
-              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#E8E4E0" strokeOpacity={0.5} vertical={false} />
-              <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#8A8580" }} dy={8} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#8A8580" }} />
+              <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#000000" }} dy={8} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#000000" }} />
               <Tooltip content={<CustomTooltip />} />
-              <Area type="monotone" dataKey="score" name="Score" stroke="#E8956B" strokeWidth={2} fill="url(#scoreG)" dot={false} activeDot={{ r: 4, strokeWidth: 2, fill: "#FFFFFF" }} />
-              <Area type="monotone" dataKey="mentions" name="Mentions" stroke="#FFCBA4" strokeWidth={2} fill="url(#mentionsG)" dot={false} activeDot={{ r: 4, strokeWidth: 2, fill: "#FFFFFF" }} />
-              <Area type="monotone" dataKey="citations" name="Citations" stroke="#8A8580" strokeWidth={1.5} fill="none" dot={false} activeDot={{ r: 4, strokeWidth: 2, fill: "#FFFFFF" }} />
+              <Area type="monotone" dataKey="score" name="Score" stroke="#9F9ADE" strokeWidth={2} fill="none" dot={false} activeDot={{ r: 4, strokeWidth: 2, fill: "#FFFFFF" }} />
+              <Area type="monotone" dataKey="mentions" name="Mentions" stroke="#B199AF" strokeWidth={2} fill="none" dot={false} activeDot={{ r: 4, strokeWidth: 2, fill: "#FFFFFF" }} />
+              <Area type="monotone" dataKey="citations" name="Citations" stroke="#D4A373" strokeWidth={1.5} fill="none" dot={false} activeDot={{ r: 4, strokeWidth: 2, fill: "#FFFFFF" }} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -167,11 +157,11 @@ export function VisibilityPage() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={mentionsByPlatform} layout="vertical" margin={{ top: 0, right: 4, bottom: 0, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E8E4E0" strokeOpacity={0.5} horizontal={false} />
-                <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#8A8580" }} />
+                <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#000000" }} />
                 <YAxis dataKey="platform" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#2D2A26" }} width={85} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="explicit" name="Explicit" fill="#E8956B" radius={[0, 4, 4, 0]} barSize={10} />
-                <Bar dataKey="implicit" name="Implicit" fill="#FFCBA4" radius={[0, 4, 4, 0]} barSize={10} />
+                <Bar dataKey="explicit" name="Explicit" fill="#ECA17A" radius={[0, 4, 4, 0]} barSize={10} />
+                <Bar dataKey="implicit" name="Implicit" fill="#FFD5B5" radius={[0, 4, 4, 0]} barSize={10} />
               </BarChart>
             </ResponsiveContainer>
           </div>

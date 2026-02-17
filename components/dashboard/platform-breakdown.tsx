@@ -9,6 +9,7 @@ interface PlatformData {
   citations: number;
   sentiment: "positive" | "neutral" | "negative";
   change: number;
+  color: string;
 }
 
 const platforms: PlatformData[] = [
@@ -19,6 +20,7 @@ const platforms: PlatformData[] = [
     citations: 87,
     sentiment: "positive",
     change: 12,
+    color: "#10A37F",
   },
   {
     name: "Gemini",
@@ -27,6 +29,7 @@ const platforms: PlatformData[] = [
     citations: 54,
     sentiment: "neutral",
     change: 8,
+    color: "#1A73E8",
   },
   {
     name: "Perplexity",
@@ -35,6 +38,7 @@ const platforms: PlatformData[] = [
     citations: 92,
     sentiment: "positive",
     change: -3,
+    color: "#20C2D5",
   },
   {
     name: "AI Overviews",
@@ -43,6 +47,7 @@ const platforms: PlatformData[] = [
     citations: 41,
     sentiment: "neutral",
     change: 15,
+    color: "#F9AB00",
   },
   {
     name: "Claude",
@@ -51,6 +56,7 @@ const platforms: PlatformData[] = [
     citations: 28,
     sentiment: "positive",
     change: 22,
+    color: "#D97757",
   },
 ];
 
@@ -100,13 +106,13 @@ export function PlatformBreakdown() {
                   cy="18"
                   r="15"
                   fill="none"
-                  stroke="#E8956B"
+                  stroke={platform.color}
                   strokeWidth="3"
                   strokeDasharray={`${platform.score * 0.942} 100`}
                   strokeLinecap="round"
                 />
               </svg>
-              <span className="absolute text-[10px] font-semibold text-foreground">
+              <span className="absolute text-[11px] font-semibold text-foreground">
                 {platform.score}
               </span>
             </div>
@@ -127,7 +133,7 @@ export function PlatformBreakdown() {
                   {platform.change}%
                 </span>
               </div>
-              <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+              <div className="flex items-center gap-3 text-[12px] text-muted-foreground">
                 <span>{platform.mentions} mentions</span>
                 <span className="text-border">|</span>
                 <span>{platform.citations} citations</span>

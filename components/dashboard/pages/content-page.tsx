@@ -1,7 +1,10 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { FileText, Sparkles, ListChecks, BarChart3, Wand2, Copy, ArrowRight, Star } from "lucide-react";
+import { AEOStudio } from "../aeo-studio";
 
 const contentScores = [
   { title: "AI Analytics Complete Guide", url: "/blog/ai-analytics-guide", score: 92, citations: 67, status: "optimized" as const },
@@ -28,10 +31,30 @@ const statusConfig = {
 };
 
 export function ContentPage() {
+  const [studioOpen, setStudioOpen] = useState(false);
+  const [activeTopic, setActiveTopic] = useState("");
+  const searchParams = useSearchParams();
+
+  // Check for topic in URL (from Backlinks "Generate Blog" button)
+  useEffect(() => {
+    const topic = searchParams.get("topic");
+    if (topic) {
+      setActiveTopic(topic);
+      setStudioOpen(true);
+    }
+  }, [searchParams]);
+
   const avgScore = Math.round(contentScores.reduce((a, b) => a + b.score, 0) / contentScores.length);
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Full-screen Studio Component */}
+      <AEOStudio 
+        isOpen={studioOpen} 
+        onClose={() => setStudioOpen(false)} 
+        initialTopic={activeTopic}
+      />
+
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
         {[
@@ -58,7 +81,10 @@ export function ContentPage() {
               <h3 className="text-sm font-semibold text-card-foreground">Content Scores</h3>
               <p className="text-xs text-muted-foreground">AI optimization score for your pages</p>
             </div>
-            <button className="nav-item flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-[11px] font-medium text-primary-foreground hover:bg-primary/90">
+            <button 
+              onClick={() => { setActiveTopic(""); setStudioOpen(true); }}
+              className="nav-item flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-[11px] font-medium text-primary-foreground hover:bg-primary/90"
+            >
               <Sparkles size={12} strokeWidth={2} />
               Generate Content
             </button>
@@ -88,7 +114,10 @@ export function ContentPage() {
                   <span className={cn("shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium", statusConfig[item.status].color)}>
                     {statusConfig[item.status].label}
                   </span>
-                  <button className="flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:bg-secondary">
+                  <button 
+                    onClick={() => { setActiveTopic(item.title); setStudioOpen(true); }}
+                    className="flex h-6 w-6 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 hover:bg-secondary"
+                  >
                     <ArrowRight size={12} strokeWidth={1.5} />
                   </button>
                 </div>
@@ -105,7 +134,11 @@ export function ContentPage() {
           </div>
           <div className="flex flex-col gap-2">
             {templates.map((t) => (
-              <button key={t.name} className="group flex items-start gap-3 rounded-lg border border-transparent p-3 text-left transition-all hover:border-border hover:bg-secondary/30">
+              <button 
+                key={t.name} 
+                onClick={() => { setActiveTopic(t.name); setStudioOpen(true); }}
+                className="group flex items-start gap-3 rounded-lg border border-transparent p-3 text-left transition-all hover:border-border hover:bg-secondary/30"
+              >
                 <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/30 text-foreground">
                   {t.icon}
                 </div>
@@ -125,7 +158,10 @@ export function ContentPage() {
             <p className="text-[11px] leading-relaxed text-muted-foreground">
               Generate AI-optimized content with our intelligent assistant. It analyzes top-performing prompts and creates content structures that maximize AI citations.
             </p>
-            <button className="mt-3 flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80">
+            <button 
+              onClick={() => { setActiveTopic(""); setStudioOpen(true); }}
+              className="mt-3 flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary/80"
+            >
               Launch Studio
               <ArrowRight size={12} strokeWidth={1.5} />
             </button>

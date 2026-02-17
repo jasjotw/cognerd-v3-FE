@@ -57,7 +57,7 @@ export function AIHealthScore() {
               cy="18"
               r="15"
               fill="none"
-              stroke={score >= 70 ? "#5B9A6B" : score >= 50 ? "#D4A44E" : "#D4644E"}
+              stroke={score >= 70 ? "#10B981" : score >= 50 ? "#F59E0B" : "#EF4444"}
               strokeWidth="2.5"
               strokeDasharray={`${score * 0.942} 100`}
               strokeLinecap="round"

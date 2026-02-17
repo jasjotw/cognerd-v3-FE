@@ -64,7 +64,7 @@ export function PromptAnalyticsWidget() {
           <h3 className="text-sm font-semibold text-card-foreground">Top Prompts</h3>
           <p className="text-xs text-muted-foreground">Queries where your brand appears</p>
         </div>
-        <button className="nav-item rounded-lg border border-border px-2.5 py-1 text-[11px] font-medium text-muted-foreground hover:bg-secondary hover:text-foreground">
+        <button className="nav-item rounded-lg border border-border px-2.5 py-1 text-[12px] font-medium text-muted-foreground hover:bg-secondary hover:text-foreground">
           Explore
         </button>
       </div>
@@ -88,7 +88,7 @@ export function PromptAnalyticsWidget() {
                   <TrendingUp size={10} strokeWidth={2} className="shrink-0 text-success" />
                 )}
               </div>
-              <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                 <span>{item.volume} vol.</span>
                 <span className="text-border">|</span>
                 <span>Pos #{item.position}</span>
@@ -103,7 +103,7 @@ export function PromptAnalyticsWidget() {
                   style={{ width: `${item.visibility}%` }}
                 />
               </div>
-              <span className="w-8 text-right font-mono text-[11px] font-medium text-foreground">
+              <span className="w-8 text-right font-mono text-[12px] font-medium text-foreground">
                 {item.visibility}
               </span>
             </div>
