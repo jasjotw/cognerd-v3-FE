@@ -1,15 +1,27 @@
-const API_BASE_URL = 'http://localhost:8787';
+const API_BASE_URL = process.env.NEXT_PUBLIC_AGXP_API_URL || 'http://localhost:8787';
 
 // Test JWT for development (expires in 1 year)
 // User: { userId: 1, email: 'test@example.com' }
 const MOCK_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImV4cCI6MTgwMjc4MTA1MH0.Vlj_Nr_906D5nwIH0qguxy5-vpAMd5uE9vI4X8Xdq_0'; 
+
+// Helper to get the auth token
+function getAuthToken() {
+  // Try to get a real token from localStorage if we're in the browser
+  if (typeof window !== 'undefined') {
+    const storedToken = localStorage.getItem('agxp_auth_token');
+    if (storedToken) return storedToken;
+  }
+  
+  // Fallback to MOCK_JWT for development or if no token is found
+  return MOCK_JWT;
+}
 
 export async function connectCloudflare(token: string) {
   const res = await fetch(`${API_BASE_URL}/api/cloudflare/connect`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${MOCK_JWT}`
+      'Authorization': `Bearer ${getAuthToken()}`
     },
     body: JSON.stringify({ token }),
   });
@@ -18,7 +30,7 @@ export async function connectCloudflare(token: string) {
 
 export async function getZones() {
   const res = await fetch(`${API_BASE_URL}/api/cloudflare/zones`, {
-    headers: { 'Authorization': `Bearer ${MOCK_JWT}` }
+    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
   });
   return res.json();
 }
@@ -28,7 +40,7 @@ export async function createDeployment(zoneId: string, zoneName: string, siteId:
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${MOCK_JWT}`
+      'Authorization': `Bearer ${getAuthToken()}`
     },
     body: JSON.stringify({ zoneId, zoneName, siteId }),
   });
@@ -37,7 +49,7 @@ export async function createDeployment(zoneId: string, zoneName: string, siteId:
 
 export async function getDeployments() {
   const res = await fetch(`${API_BASE_URL}/api/deployments`, {
-    headers: { 'Authorization': `Bearer ${MOCK_JWT}` }
+    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
   });
   return res.json();
 }
@@ -47,7 +59,7 @@ export async function createVariant(deploymentId: number, urlPath: string, conte
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${MOCK_JWT}`
+      'Authorization': `Bearer ${getAuthToken()}`
     },
     body: JSON.stringify({ deploymentId, urlPath, content }),
   });
@@ -71,7 +83,7 @@ export async function autoGenerateVariant(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${MOCK_JWT}`
+      'Authorization': `Bearer ${getAuthToken()}`
     },
     body: JSON.stringify({ deploymentId, urlPath, sourceUrl, instructions }),
   });
@@ -80,14 +92,14 @@ export async function autoGenerateVariant(
 
 export async function getAnalytics(deploymentId: number) {
   const res = await fetch(`${API_BASE_URL}/api/analytics/${deploymentId}`, {
-    headers: { 'Authorization': `Bearer ${MOCK_JWT}` }
+    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
   });
   return res.json();
 }
 
 export async function getSummary(deploymentId: number, period: '24h' | '7d' = '24h') {
   const res = await fetch(`${API_BASE_URL}/api/analytics/${deploymentId}/summary?period=${period}`, {
-    headers: { 'Authorization': `Bearer ${MOCK_JWT}` }
+    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
   });
   return res.json();
 }
