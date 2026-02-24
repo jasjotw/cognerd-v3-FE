@@ -2,7 +2,8 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_AGXP_URL || 'http://localhost:8787'
 
 // Test JWT for development (expires in 1 year)
 // User: { userId: 1, email: 'test@example.com' }
-const MOCK_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImV4cCI6MTgwMjc4MTA1MH0.Vlj_Nr_906D5nwIH0qguxy5-vpAMd5uE9vI4X8Xdq_0'; 
+// This token is explicitly signed with the word 'Secret' to match the backend config.
+const MOCK_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImV4cCI6MTgwMzQ2Nzg0OH0.ISUA2dhD1Ao2MbKXAoVMdtJOKkuAMZIUnXit7Hcw0Rs'; 
 
 // Helper to get the auth token
 function getAuthToken() {
