@@ -26,14 +26,24 @@ export async function connectCloudflare(token: string) {
     },
     body: JSON.stringify({ token }),
   });
-  return res.json();
+  
+  const data = await res.json();
+  if (!res.ok) {
+    return { success: false, error: data.error || `HTTP error ${res.status}` };
+  }
+  return data;
 }
 
 export async function getZones() {
   const res = await fetch(`${API_BASE_URL}/api/cloudflare/zones`, {
     headers: { 'Authorization': `Bearer ${getAuthToken()}` }
   });
-  return res.json();
+  
+  const data = await res.json();
+  if (!res.ok) {
+     throw new Error(data.error || `HTTP error ${res.status}`);
+  }
+  return data;
 }
 
 export async function createDeployment(zoneId: string, zoneName: string, siteId: string) {

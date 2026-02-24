@@ -151,7 +151,13 @@ export function AgxpPage() {
   const handleConnect = async () => {
     if (!token) return;
     try {
-      await connectCloudflare(token);
+      const connectResult = await connectCloudflare(token);
+      
+      // If the backend returns an error (like { success: false, error: '...' })
+      if (!connectResult || connectResult.success === false) {
+        throw new Error(connectResult?.error || "Failed to connect to Cloudflare");
+      }
+
       const { zones } = await getZones();
       setZones(zones?.length > 0 ? zones : []);
       setIsConnected(true);
@@ -160,7 +166,7 @@ export function AgxpPage() {
       setTimeout(() => setNotification(""), 3000);
     } catch (err: any) {
       console.error(err);
-      setNotification("Failed to connect to Cloudflare");
+      setNotification(err.message || "Failed to connect to Cloudflare");
       setTimeout(() => setNotification(""), 3000);
       setIsConnected(false);
     }
