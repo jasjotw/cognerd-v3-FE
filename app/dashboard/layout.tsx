@@ -19,6 +19,7 @@ const pageConfig: Record<string, { title: string; subtitle: string }> = {
   "/dashboard/backlinks": { title: "Backlink Analysis", subtitle: "Monitor and optimize your inbound link profile" },
   "/dashboard/alerts": { title: "Alerts", subtitle: "Monitoring notifications and updates" },
   "/dashboard/settings": { title: "Settings", subtitle: "Manage your account and preferences" },
+  "/dashboard/agxp": { title: "AGXP", subtitle: "AI-Generated eXperience Platform" },
 };
 
 export default function DashboardLayout({

@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   Sparkles,
   Network,
+  Cloud
 } from "lucide-react";
 
 interface NavItem {
@@ -46,6 +47,7 @@ const navGroups: NavGroup[] = [
     title: "Optimize",
     items: [
       { label: "Content Studio", icon: <FileText size={18} strokeWidth={1.5} />, id: "content", href: "/dashboard/content" },
+      { label: "AGXP Edge Delivery", icon: <Cloud size={18} strokeWidth={1.5} />, id: "agxp", href: "/dashboard/agxp", badge: "New" },
       { label: "Source Attribution", icon: <Link2 size={18} strokeWidth={1.5} />, id: "sources", href: "/dashboard/sources" },
       { label: "Diagnostics", icon: <Wrench size={18} strokeWidth={1.5} />, id: "diagnostics", href: "/dashboard/diagnostics" },
     ],
