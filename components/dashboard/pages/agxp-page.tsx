@@ -7,13 +7,14 @@ import {
   getZones,
   createDeployment,
   getDeployments,
+  deleteDeployment,
   getAnalytics,
   createVariant,
   autoGenerateVariant,
 } from "@/lib/services/agxp-api";
 import { cn } from "@/lib/utils";
 import { MetricCard } from "../metric-card";
-import { Cloud, Zap, CheckCircle2, Server, Activity, Bot, AlertCircle, RefreshCw, Sparkles, Info, Plus, ChevronRight, LayoutTemplate } from "lucide-react";
+import { Cloud, Zap, CheckCircle2, Server, Activity, Bot, AlertCircle, RefreshCw, Sparkles, Info, Plus, ChevronRight, LayoutTemplate, Trash2 } from "lucide-react";
 
 const normalizeSourceUrl = (raw: string) => {
   const trimmed = raw.trim();
@@ -106,6 +107,7 @@ export function AgxpPage() {
   const [showDeployForm, setShowDeployForm] = useState(false);
   const [notification, setNotification] = useState("");
   const [expandedDeploymentId, setExpandedDeploymentId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   // Variant creation state
   const [showVariantForm, setShowVariantForm] = useState(false);
@@ -138,10 +140,53 @@ export function AgxpPage() {
   const loadDeployments = async () => {
     try {
       const { deployments } = await getDeployments();
-      setDeployments(deployments?.length > 0 ? deployments : []);
-      // In a real app, you'd fetch analytics per deployment or globally.
-      // For now, setting to null since dummy data is removed.
-      setAnalytics(null); 
+      const validDeployments = deployments?.length > 0 ? deployments : [];
+      setDeployments(validDeployments);
+      
+      if (validDeployments.length > 0) {
+        try {
+          const analyticsPromises = validDeployments.map((d: any) => getAnalytics(d.id).catch(() => null));
+          const analyticsResults = await Promise.all(analyticsPromises);
+
+          const aggregated = {
+            totalRequests: 0,
+            variantsServed: 0,
+            botTypes: {} as Record<string, number>,
+            topPathsMap: {} as Record<string, number>,
+            topPaths: [] as any[],
+          };
+
+          analyticsResults.forEach(res => {
+            if (!res) return;
+            aggregated.totalRequests += (res.totalRequests || 0);
+            aggregated.variantsServed += (res.variantsServed || 0);
+
+            if (res.botTypes) {
+              Object.entries(res.botTypes).forEach(([bot, count]) => {
+                aggregated.botTypes[bot] = (aggregated.botTypes[bot] || 0) + (count as number);
+              });
+            }
+
+            if (res.topPaths) {
+              res.topPaths.forEach((tp: any) => {
+                aggregated.topPathsMap[tp.path] = (aggregated.topPathsMap[tp.path] || 0) + tp.count;
+              });
+            }
+          });
+
+          aggregated.topPaths = Object.entries(aggregated.topPathsMap)
+            .map(([path, count]) => ({ path, count }))
+            .sort((a, b) => (b.count as number) - (a.count as number))
+            .slice(0, 5);
+
+          setAnalytics(aggregated);
+        } catch (err) {
+          console.error("Failed to fetch analytics", err);
+          setAnalytics(null);
+        }
+      } else {
+        setAnalytics(null);
+      }
     } catch {
       setDeployments([]);
       setAnalytics(null);
@@ -187,6 +232,26 @@ export function AgxpPage() {
       console.error(err);
       setNotification("Deployment failed!");
       setTimeout(() => setNotification(""), 3000);
+    }
+  };
+
+  const handleDeleteDeployment = async (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
+    if (!confirm("Are you sure you want to delete this deployment? This will remove the Edge Worker and all routing rules from Cloudflare.")) return;
+    
+    setDeletingId(id);
+    try {
+      await deleteDeployment(id);
+      setNotification("Deployment deleted and cleaned up!");
+      setTimeout(() => setNotification(""), 3000);
+      if (expandedDeploymentId === id) setExpandedDeploymentId(null);
+      loadDeployments();
+    } catch (err: any) {
+      console.error(err);
+      setNotification(err.message || "Failed to delete deployment");
+      setTimeout(() => setNotification(""), 3000);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -615,8 +680,18 @@ export function AgxpPage() {
                       {d.status === "active" && <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-success animate-pulse shadow-[0_0_5px_rgba(var(--success),0.5)]"></span>}
                       {d.status}
                     </span>
-                    <div className={cn("p-1.5 rounded-lg transition-all duration-300", expandedDeploymentId === d.id ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground group-hover:bg-muted group-hover:text-foreground")}>
-                       <ChevronRight size={16} className={cn("transition-transform duration-300", expandedDeploymentId === d.id ? "rotate-90" : "")} />
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={(e) => handleDeleteDeployment(e, d.id)}
+                        disabled={deletingId === d.id}
+                        className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                        title="Delete Deployment"
+                      >
+                        {deletingId === d.id ? <RefreshCw size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                      </button>
+                      <div className={cn("p-1.5 rounded-lg transition-all duration-300", expandedDeploymentId === d.id ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground group-hover:bg-muted group-hover:text-foreground")}>
+                         <ChevronRight size={16} className={cn("transition-transform duration-300", expandedDeploymentId === d.id ? "rotate-90" : "")} />
+                      </div>
                     </div>
                   </div>
                 </div>

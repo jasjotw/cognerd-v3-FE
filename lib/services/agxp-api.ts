@@ -65,6 +65,18 @@ export async function getDeployments() {
   return res.json();
 }
 
+export async function deleteDeployment(deploymentId: number) {
+  const res = await fetch(`${API_BASE_URL}/api/deployments/${deploymentId}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || `HTTP error ${res.status}`);
+  }
+  return data;
+}
+
 export async function createVariant(deploymentId: number, urlPath: string, content: string) {
   const res = await fetch(`${API_BASE_URL}/api/variants`, {
     method: 'POST',
