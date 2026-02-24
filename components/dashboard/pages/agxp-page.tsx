@@ -92,45 +92,7 @@ const Input = ({ className, ...props }: React.InputHTMLAttributes<HTMLInputEleme
   />
 );
 
-const DUMMY_ANALYTICS = {
-  totalRequests: 12450,
-  variantsServed: 8430,
-  botTypes: {
-    "GPTBot": 4200,
-    "ClaudeBot": 2100,
-    "PerplexityBot": 1500,
-    "GoogleOther": 630
-  },
-  topPaths: [
-    { path: "/pricing", count: 3200 },
-    { path: "/features/ai-seo", count: 2800 },
-    { path: "/blog/what-is-agxp", count: 1400 },
-    { path: "/about", count: 600 },
-    { path: "/contact", count: 430 }
-  ]
-};
 
-const DUMMY_DEPLOYMENTS = [
-  {
-    id: 1,
-    zoneName: "acme-corp.com",
-    workerName: "agxp-edge-acme-prod",
-    deployedAt: "2026-02-10T10:00:00Z",
-    status: "active"
-  },
-  {
-    id: 2,
-    zoneName: "blog.acme-corp.com",
-    workerName: "agxp-edge-acme-blog",
-    deployedAt: "2026-02-15T14:30:00Z",
-    status: "active"
-  }
-];
-
-const DUMMY_ZONES = [
-  { id: "zone1", name: "acme-corp.com" },
-  { id: "zone2", name: "blog.acme-corp.com" }
-];
 
 export function AgxpPage() {
   const [token, setToken] = useState("");
@@ -176,11 +138,13 @@ export function AgxpPage() {
   const loadDeployments = async () => {
     try {
       const { deployments } = await getDeployments();
-      setDeployments(deployments?.length > 0 ? deployments : DUMMY_DEPLOYMENTS);
-      setAnalytics(DUMMY_ANALYTICS);
+      setDeployments(deployments?.length > 0 ? deployments : []);
+      // In a real app, you'd fetch analytics per deployment or globally.
+      // For now, setting to null since dummy data is removed.
+      setAnalytics(null); 
     } catch {
-      setDeployments(DUMMY_DEPLOYMENTS);
-      setAnalytics(DUMMY_ANALYTICS);
+      setDeployments([]);
+      setAnalytics(null);
     }
   };
 
@@ -189,17 +153,16 @@ export function AgxpPage() {
     try {
       await connectCloudflare(token);
       const { zones } = await getZones();
-      setZones(zones?.length > 0 ? zones : DUMMY_ZONES);
+      setZones(zones?.length > 0 ? zones : []);
       setIsConnected(true);
       loadDeployments();
       setNotification("Connected to Cloudflare!");
       setTimeout(() => setNotification(""), 3000);
     } catch (err: any) {
-      setZones(DUMMY_ZONES);
-      setIsConnected(true);
-      loadDeployments();
-      setNotification("Simulated connection successful!");
+      console.error(err);
+      setNotification("Failed to connect to Cloudflare");
       setTimeout(() => setNotification(""), 3000);
+      setIsConnected(false);
     }
   };
 
@@ -212,20 +175,12 @@ export function AgxpPage() {
       setTimeout(() => setNotification(""), 3000);
       loadDeployments();
       setShowDeployForm(false);
-    } catch (err: any) {
-      const newDeployment = {
-        id: Math.random(),
-        zoneName,
-        workerName: `agxp-edge-${siteId}`,
-        deployedAt: new Date().toISOString(),
-        status: "active"
-      };
-      setDeployments([newDeployment, ...deployments]);
-      setNotification("Simulated deployment successful!");
-      setTimeout(() => setNotification(""), 3000);
-      setShowDeployForm(false);
       setSiteId("");
       setSelectedZone("");
+    } catch (err: any) {
+      console.error(err);
+      setNotification("Deployment failed!");
+      setTimeout(() => setNotification(""), 3000);
     }
   };
 
@@ -256,43 +211,21 @@ export function AgxpPage() {
           instructions || undefined
         );
         if (!result.success) {
-          setTimeout(() => {
-            setGeneratedPreview({ 
-              path: variantPath, 
-              content: `<html>\n  <head>\n    <title>AI Optimized Variant</title>\n    <style>body { font-family: sans-serif; padding: 2rem; line-height: 1.6; color: #333; } h1 { color: #111; letter-spacing: -0.02em; }</style>\n  </head>\n  <body>\n    <h1>Optimized content for ${normalizedPath}</h1>\n    <p>This is a simulated AI-generated page based on <strong>${normalizedSourceUrl}</strong>.</p>\n    <p>In a real environment, this would contain semantic HTML optimized specifically for LLM consumption (ChatGPT, Gemini, etc).</p>\n  </body>\n</html>`, 
-              variantId: Math.random() 
-            });
-            setNotification("Variant auto-generated! Review preview below.");
-            setTimeout(() => setNotification(""), 3000);
-            setIsSubmitting(false);
-          }, 1500);
+          console.error("Auto generation failed:", result.error);
+          setNotification("Variant auto-generation failed.");
+          setTimeout(() => setNotification(""), 3000);
           return;
         }
         setGeneratedPreview({ path: variantPath, content: result.contentPreview || "Preview unavailable", variantId: result.variantId });
         setNotification("Variant auto-generated! Review preview below.");
         setTimeout(() => setNotification(""), 3000);
       }
-    } catch {
-      if (autoMode === "manual") {
-        setNotification("Simulated variant creation successful!");
-        setTimeout(() => setNotification(""), 3000);
-        setShowVariantForm(false);
-        setVariantPath("");
-        setVariantContent("");
-      } else {
-        setTimeout(() => {
-            setGeneratedPreview({ 
-              path: variantPath, 
-              content: `<html>\n  <head>\n    <title>AI Optimized Variant</title>\n    <style>body { font-family: sans-serif; padding: 2rem; line-height: 1.6; color: #333; } h1 { color: #111; letter-spacing: -0.02em; }</style>\n  </head>\n  <body>\n    <h1>Optimized content for ${normalizedPath}</h1>\n    <p>This is a simulated AI-generated page based on <strong>${sourceUrl}</strong>.</p>\n  </body>\n</html>`, 
-              variantId: Math.random() 
-            });
-            setNotification("Simulated auto-generation successful!");
-            setTimeout(() => setNotification(""), 3000);
-            setIsSubmitting(false);
-          }, 1500);
-      }
+    } catch (err: any) {
+      console.error(err);
+      setNotification("Action failed! Check console.");
+      setTimeout(() => setNotification(""), 3000);
     } finally {
-      if (autoMode === "manual") setIsSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -848,14 +781,12 @@ export function AgxpPage() {
                                           setTimeout(() => setNotification(""), 3000);
                                           setGeneratedPreview(null);
                                           setShowVariantForm(false);
-                                        } catch {
-                                          setTimeout(() => {
-                                            setNotification("Simulated variant deployment to edge!");
-                                            setTimeout(() => setNotification(""), 3000);
-                                            setGeneratedPreview(null);
-                                            setShowVariantForm(false);
-                                            setIsSubmitting(false);
-                                          }, 1000);
+                                        } catch (err: any) {
+                                          console.error(err);
+                                          setNotification("Failed to deploy variant to edge.");
+                                          setTimeout(() => setNotification(""), 3000);
+                                        } finally {
+                                          setIsSubmitting(false);
                                         }
                                       }}
                                     >
