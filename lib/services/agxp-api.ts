@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_AGXP_API_URL || 'http://localhost:8787';
+const API_BASE_URL = process.env.NEXT_PUBLIC_AGXP_URL || 'http://localhost:8787';
 
 // Test JWT for development (expires in 1 year)
 // User: { userId: 1, email: 'test@example.com' }
