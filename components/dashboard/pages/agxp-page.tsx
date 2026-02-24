@@ -108,6 +108,7 @@ export function AgxpPage() {
   const [notification, setNotification] = useState("");
   const [expandedDeploymentId, setExpandedDeploymentId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [deploymentToDelete, setDeploymentToDelete] = useState<any | null>(null);
 
   // Variant creation state
   const [showVariantForm, setShowVariantForm] = useState(false);
@@ -235,23 +236,36 @@ export function AgxpPage() {
     }
   };
 
-  const handleDeleteDeployment = async (e: React.MouseEvent, id: number) => {
+  const confirmDeleteDeployment = (e: React.MouseEvent, deployment: any) => {
     e.stopPropagation();
-    if (!confirm("Are you sure you want to delete this deployment? This will remove the Edge Worker and all routing rules from Cloudflare.")) return;
+    setDeploymentToDelete(deployment);
+  };
+
+  const executeDeleteDeployment = async () => {
+    if (!deploymentToDelete) return;
     
-    setDeletingId(id);
+    setDeletingId(deploymentToDelete.id);
     try {
-      await deleteDeployment(id);
+      await deleteDeployment(deploymentToDelete.id);
       setNotification("Deployment deleted and cleaned up!");
       setTimeout(() => setNotification(""), 3000);
-      if (expandedDeploymentId === id) setExpandedDeploymentId(null);
-      loadDeployments();
+      
+      // Optimistically remove the deployment from the state
+      setDeployments(prev => prev.filter(d => d.id !== deploymentToDelete.id));
+      
+      if (expandedDeploymentId === deploymentToDelete.id) {
+        setExpandedDeploymentId(null);
+      }
+      
+      // Refresh analytics after deletion
+      loadDeployments(); 
     } catch (err: any) {
       console.error(err);
       setNotification(err.message || "Failed to delete deployment");
       setTimeout(() => setNotification(""), 3000);
     } finally {
       setDeletingId(null);
+      setDeploymentToDelete(null);
     }
   };
 
@@ -682,7 +696,7 @@ export function AgxpPage() {
                     </span>
                     <div className="flex items-center gap-1">
                       <button
-                        onClick={(e) => handleDeleteDeployment(e, d.id)}
+                        onClick={(e) => confirmDeleteDeployment(e, d)}
                         disabled={deletingId === d.id}
                         className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
                         title="Delete Deployment"
@@ -933,6 +947,59 @@ export function AgxpPage() {
           </AnimatePresence>
         </motion.div>
       </motion.section>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {deploymentToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }} 
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm"
+              onClick={() => setDeploymentToDelete(null)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative z-50 w-full max-w-md overflow-hidden rounded-2xl border border-border/60 bg-card p-6 shadow-2xl"
+            >
+              <div className="mb-6 flex flex-col items-center text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+                  <AlertCircle className="h-6 w-6 text-destructive" />
+                </div>
+                <h2 className="text-xl font-bold tracking-tight text-foreground">Delete Deployment?</h2>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  Are you sure you want to delete <span className="font-semibold text-foreground">{deploymentToDelete.zoneName}</span>? This will permanently remove the Edge Worker, KV variants, and all routing rules from Cloudflare.
+                </p>
+              </div>
+              <div className="flex gap-3">
+                <Button 
+                  variant="outline" 
+                  className="flex-1" 
+                  onClick={() => setDeploymentToDelete(null)}
+                  disabled={deletingId === deploymentToDelete.id}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  variant="default" 
+                  className="flex-1 bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm shadow-destructive/20" 
+                  onClick={executeDeleteDeployment}
+                  disabled={deletingId === deploymentToDelete.id}
+                >
+                  {deletingId === deploymentToDelete.id ? (
+                    <><RefreshCw size={16} className="mr-2 animate-spin" /> Deleting...</>
+                  ) : (
+                    "Yes, Delete it"
+                  )}
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
