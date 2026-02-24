@@ -257,12 +257,17 @@ export function AgxpPage() {
         setExpandedDeploymentId(null);
       }
       
-      // Refresh analytics after deletion
-      loadDeployments(); 
+      // We purposefully do not await `getDeployments` immediately 
+      // here because D1 replication takes ~50ms. We just let the optimistic update stand.
+      setTimeout(() => {
+        loadDeployments(); 
+      }, 500);
+
     } catch (err: any) {
       console.error(err);
       setNotification(err.message || "Failed to delete deployment");
-      setTimeout(() => setNotification(""), 3000);
+      // If it failed, revert the optimistic update by reloading real data
+      loadDeployments();
     } finally {
       setDeletingId(null);
       setDeploymentToDelete(null);
